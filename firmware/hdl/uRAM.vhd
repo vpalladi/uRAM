@@ -21,8 +21,13 @@ entity uRAM is
 
     wen   : in std_logic;
     d_in  : in  lword;
-    d_out : out lword
-    
+    d_out : out lword;
+
+    ipb_clk : in  std_logic;
+
+    ipb_in      : in  ipb_wbus;
+    ipb_out     : out ipb_rbus
+
     );
 
 end uRAM;

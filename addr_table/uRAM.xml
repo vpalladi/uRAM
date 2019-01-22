@@ -1,0 +1,22 @@
+
+
+<node id="TOP">
+
+  <node id="uram_data" address="0x00" mode="block" size="0x50" description="data to/from uram" fwinfo="endpoint;width=1"/>
+  <node id="uram_addr" address="0x50" mode="block" size="0x50" description="uram addr" fwinfo="endpoint;width=1"/>
+
+  <node id="uram_csr"  address="0xA0" description="uram ctrl and stat" fwinfo="endpoint;width=1" >
+    <node id="ctrl" address="0x0">
+      <node id="wr"          mask="0x01"/>
+      <node id="rd"          mask="0x02"/>
+      <node id="auto_mode"   mask="0x04"/>
+      <node id="mode"        mask="0x08"/>
+      <!-- <node id="" mask="0x10"/> -->
+      
+    </node>
+    <node id="stat" address="0x1" >
+      <!-- <node id="" mask="0x1"/> -->
+    </node>
+  </node>
+
+</node>
