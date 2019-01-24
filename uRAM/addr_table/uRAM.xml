@@ -1,7 +1,7 @@
 
-
 <node id="uRAM">
 
-  <node id="uram" address="0x0" mode="block" size="0x1000" description="data to/from uram" fwinfo="endpoint;width=12"/>
+  <node id="addr" address="0x0"/>
+  <node id="data" address="0x1"/>
 
 </node>

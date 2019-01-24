@@ -1,0 +1,4 @@
+<node id="payload">
+   <node id="uRAM_0" module="file://uRAM.xml" address="0x0"    fwinfo="endpoint;width=1"/>
+   <node id="uRAM_1" module="file://uRAM.xml" address="0x2" fwinfo="endpoint;width=1"/>
+</node>

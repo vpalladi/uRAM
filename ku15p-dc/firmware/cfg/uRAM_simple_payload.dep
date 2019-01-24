@@ -4,4 +4,4 @@ src -c emp-fwk:components/datapath emp_data_types.vhd
 src -c ipbus-firmware:components/ipbus_core ipbus_package.vhd
 src -c emp-fwk:components/ttc mp7_ttc_decl.vhd
 #src ../ucf/emp_simple_payload.tcl
-addrtab payload.xml
+addrtab -t emp_payload.xml
