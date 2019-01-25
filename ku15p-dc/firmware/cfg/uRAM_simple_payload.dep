@@ -1,7 +1,9 @@
-include -c uRAM 
-src uRAM_payload.vhd
+src emp_payload.vhd
+include -c uRAM
+src ipbus_decode_emp_payload.vhd
 src -c emp-fwk:components/datapath emp_data_types.vhd
-src -c ipbus-firmware:components/ipbus_core ipbus_package.vhd
+src -c ipbus-firmware:components/ipbus_core ipbus_fabric_sel.vhd ipbus_package.vhd 
 src -c emp-fwk:components/ttc mp7_ttc_decl.vhd
+#src -c components/ipbus_core 
 #src ../ucf/emp_simple_payload.tcl
 addrtab -t emp_payload.xml

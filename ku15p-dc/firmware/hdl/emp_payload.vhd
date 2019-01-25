@@ -51,6 +51,9 @@ architecture rtl of emp_payload is
   signal uRAM_din  : lword;
   signal uRAM_dout : lword;
 
+  signal ipbw : ipb_wbus_array(N_SLAVES-1 downto 0);
+  signal ipbr : ipb_rbus_array(N_SLAVES-1 downto 0);
+      
   attribute dont_touch              : string;
   attribute dont_touch of uRAM_din  : signal is "true";
   attribute dont_touch of uRAM_dout : signal is "true";
@@ -103,7 +106,7 @@ begin
         rst   => rst,
         wen   => '1',
         d_in  => d(1),
-        d_out => q(1)
+        d_out => q(1),
         ipb_clk => clk,
         ipb_in  => ipbw(N_SLV_URAM_1),
         ipb_out => ipbr(N_SLV_URAM_1)
@@ -133,7 +136,7 @@ begin
 --        ipb_out => ipb_out
 --        );
 
-  end generate;
+--  end generate;
 
   bc0 <= '0';
 

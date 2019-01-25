@@ -13,7 +13,7 @@ use work.ipbus.all;
 
 entity uRAM is
   generic (
-    uRAM_depth : integer := 12
+    uRAM_depth : integer := 12 -- bit
     );
   port (
     clk   : in std_logic;
@@ -46,9 +46,9 @@ architecture rtl of uRAM is
   signal uRAM_dout   : std_logic_vector(71 downto 0);
   signal uRAM_dout_1 : std_logic_vector(71 downto 0);
 
-  type my_state is (S0, S1, S2);
+--  type my_state is (S0, S1, S2);
 
-  signal state : my_state := S0;
+--  signal state : my_state := S0;
   
 begin  -- architecture rtl
 
@@ -65,9 +65,6 @@ begin  -- architecture rtl
       
     end if;
   end process registers;
-  
-
-
 
   
   -- xpm_memory_sdpram: Simple Dual Port RAM
