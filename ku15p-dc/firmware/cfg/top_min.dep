@@ -1,4 +1,5 @@
 #include -c components/payload emp_simple_payload.dep
 include uRAM_simple_payload.dep
-include -c emp-fwk:boards/ku15p-dc ku15p-dc.dep
+include -c emp-fwk:boards/serenity/dc_ku15p dc_ku15p.dep 
+#include -c emp-fwk:boards/ku15p-dc ku15p-dc.dep
 src ku15p_decl_min.vhd

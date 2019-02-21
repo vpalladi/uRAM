@@ -90,7 +90,7 @@ begin
 
     uRAM_1 : entity work.uRAM
       port map (
-        clk   => clk_p,
+        clk   => clk,
         rst   => rst,
         wen   => '1',
         d_in  => d(0),
@@ -102,7 +102,7 @@ begin
 
     uRAM_2 : entity work.uRAM
       port map (
-        clk   => clk_p,
+        clk   => clk,
         rst   => rst,
         wen   => '1',
         d_in  => d(1),
