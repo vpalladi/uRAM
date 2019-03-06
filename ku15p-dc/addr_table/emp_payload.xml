@@ -1,8 +1,9 @@
 <node id="payload">
-  <!---
-      <node id="uRAM_0" module="file://uRAM.xml" address="0x0"    fwinfo="endpoint;width=12"/>
-      <node id="uRAM_1" module="file://uRAM.xml" address="0x1000" fwinfo="endpoint;width=12"/>
+
+  <node id="uRAM_0" address="0x0"    mode="block" size="4096" fwinfo="endpoint;width=12"/>
+  <node id="uRAM_1" address="0x1000" mode="block" size="4096" fwinfo="endpoint;width=12"/>
+<!--
+<node id="uRAM_0" address="0x0"    permission="rw" mode="block" size="4096" fwinfo="width=12"/>
+<node id="uRAM_1" address="0x1000" permission="rw" mode="block" size="4096" fwinfo="width=12"/>
   -->
-   <node id="uRAM_0" address="0x0"    permission="rw" mode="block" size="4096"/>
-   <node id="uRAM_1" address="0x1000" permission="rw" mode="block" size="4096"/>
 </node>

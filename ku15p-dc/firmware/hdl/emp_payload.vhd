@@ -87,31 +87,34 @@ begin
 --  begin
 
     --dr(0) <= d(ich downto icl);
+  q(2) <= d(2); 
 
-    uRAM_1 : entity work.uRAM
-      port map (
-        clk   => clk,
-        rst   => rst,
-        wen   => '1',
-        d_in  => d(0),
-        d_out => q(0),
-        ipb_clk => clk,
-        ipb_in  => ipbw(N_SLV_URAM_0),
-        ipb_out => ipbr(N_SLV_URAM_0)
-        );     
+  uRAM_1 : entity work.ipbus_uRAM
+    port map (
+--      clk   => clk,
+      clk   => clk_payload(0),
+      rst   => rst,
+      wen   => '1',
+      d_in  => d(0),
+      d_out => q(0),
+      ipb_clk => clk,
+      ipb_in  => ipbw(N_SLV_URAM_0),
+      ipb_out => ipbr(N_SLV_URAM_0)
+      );
 
-    uRAM_2 : entity work.uRAM
-      port map (
-        clk   => clk,
-        rst   => rst,
-        wen   => '1',
-        d_in  => d(1),
-        d_out => q(1),
-        ipb_clk => clk,
-        ipb_in  => ipbw(N_SLV_URAM_1),
-        ipb_out => ipbr(N_SLV_URAM_1)
-        );
+  --q(0).strobe <= '1';
+  
+  uRAM_2 : entity work.passThrough_uRAM
+    port map (
+      clk   => clk_p,
+      rst   => rst,
+      d_in  => d(1),
+      d_out => q(1)
+      );
 
+  --q(1).strobe <= '1';
+
+  
 --    uRAM_3 : entity work.uRAM
 --      port map (
 --        clk   => clk_p,
