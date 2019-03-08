@@ -41,10 +41,14 @@ architecture rtl of ipbus_uRAM is
   signal uRAM_dataOut : std_logic_vector(71 downto 0);
   signal uRAM_addrOut : std_logic_vector(uRAM_depth-1 downto 0);
 
-  signal ack         : std_logic_vector(3 downto 0);
+  signal ack          : std_logic_vector(3 downto 0);
   
-  signal ipb_we        : std_logic_vector(0 downto 0);
+  signal ipb_we       : std_logic_vector(0 downto 0);
+  signal ipb_wdata    : std_logic_vector(127 downto 0);
+  signal ipb_rdata    : std_logic_vector(127 downto 0);
   
+
+
 begin  -- architecture rtl
 
 
@@ -63,19 +67,51 @@ begin  -- architecture rtl
 
         -- writing
         if ipb_in.ipb_write = '1' then
-          ipb_we(0) <= '1';
+          --ipb_we(0) <= '1';
           ack <= "0010";
+          
+          case ipb_in.ipb_addr(1 downto 0) is
+            when "00" => ipb_wdata( 31 downto  0) <= ipb_in.ipb_wdata; ipb_we(0) <= '0';
+            when "01" => ipb_wdata( 63 downto 32) <= ipb_in.ipb_wdata; ipb_we(0) <= '0';
+            when "10" => ipb_wdata( 95 downto 64) <= ipb_in.ipb_wdata; ipb_we(0) <= '0';
+            when "11" => ipb_wdata(127 downto 96) <= ipb_in.ipb_wdata; ipb_we(0) <= '1';
+          end case;
+          
+
         end if;
         
         -- reading 
         if ipb_in.ipb_write = '0' then
           ack <= "1000";
+    --      case ipb_in.ipb_addr(1 downto 0) is
+    --        when "00" => ipb_out.ipb_rdata <= ipb_rdata( 31 downto  0);
+    --        when "01" => ipb_out.ipb_rdata <= ipb_rdata( 63 downto 32);
+    --        when "10" => ipb_out.ipb_rdata <= ipb_rdata( 95 downto 64);
+    --        when "11" => ipb_out.ipb_rdata <= ipb_rdata(127 downto 96);
+    --      end case;
+
+
         end if;
 
       end if;
         
     end if;  
   end process rd_wr_uRAM;
+
+
+  wr_mux: process (ipb_in.ipb_addr, ipb_rdata) is
+  begin  -- process wr_mux
+    
+    case ipb_in.ipb_addr(1 downto 0) is
+      when "00" => ipb_out.ipb_rdata <= ipb_rdata( 31 downto  0);
+      when "01" => ipb_out.ipb_rdata <= ipb_rdata( 63 downto 32);
+      when "10" => ipb_out.ipb_rdata <= ipb_rdata( 95 downto 64);
+      when "11" => ipb_out.ipb_rdata <= ipb_rdata(127 downto 96);
+    end case;
+    
+  end process wr_mux;
+  
+
   
   ipbus_ila_inst : entity work.ipbus_ila
   port map 
@@ -87,19 +123,18 @@ begin  -- architecture rtl
     probe0( 64)            => ipb_in.ipb_strobe,     
     probe0( 65)            => ipb_in.ipb_strobe,     
     probe0( 66 downto  66) => ipb_we,     
-    probe0( 70 downto  67) => ack     
+    probe0( 70 downto  67) => ack,
+    probe0( 103 downto 71) => (others =>'0')
   );
   --===================================--
 
-
-
   --===== clock domain crossing =======--
-  cdc_addr : entity work.sync_ffs generic map (nbr_bits => 12) port map (clk_i => uRAM_clk, data_i => ipb_in.ipb_addr(uRAM_depth-1 downto 0), synced_o => uRAM_addrIn);
-  cdc_wdata: entity work.sync_ffs generic map (nbr_bits => 32) port map (clk_i => uRAM_clk, data_i => ipb_in.ipb_wdata,                       synced_o => uRAM_dataIn(31 downto 0));
-  cdc_wen:   entity work.sync_ffs generic map (nbr_bits =>  1) port map (clk_i => uRAM_clk, data_i => ipb_we,                                 synced_o => uRAM_we);
-  cdc_rdata: entity work.sync_ffs generic map (nbr_bits => 32) port map (clk_i => ipb_clk,  data_i => uRAM_dataOut(31 downto 0),              synced_o => ipb_out.ipb_rdata);
+  cdc_addr : entity work.sync_ffs generic map (nbr_bits => 12) port map (clk_i => uRAM_clk, data_i => ipb_in.ipb_addr(uRAM_depth+1 downto 2), synced_o => uRAM_addrIn);
+  cdc_wdata: entity work.sync_ffs generic map (nbr_bits => 72) port map (clk_i => uRAM_clk, data_i => ipb_wdata(71 downto 0),                 synced_o => uRAM_dataIn);
+  cdc_wen  : entity work.sync_ffs generic map (nbr_bits =>  1) port map (clk_i => uRAM_clk, data_i => ipb_we,                                 synced_o => uRAM_we    );
+  --cdc_rdata: entity work.sync_ffs generic map (nbr_bits => 72) port map (clk_i => ipb_clk,  data_i => uRAM_dataOut,                           synced_o => ipb_rdata(71 downto 0));
   --===================================--
-
+  ipb_rdata(71 downto 0) <= uRAM_dataOut;
 
 
   --===== uRAM clock domain ===========--
@@ -118,7 +153,7 @@ begin  -- architecture rtl
       );
   
   
-  uRAM_dataIn(71 downto 32) <= (others => '0');
+--  uRAM_dataIn(71 downto 32) <= (others => '0');
   uRAM_addrOut <= uRAM_addrIn;
   uRAM_clk   <= clk;
   uRAM_rst   <= rst;
